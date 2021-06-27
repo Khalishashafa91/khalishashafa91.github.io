@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geologi Kebencanaan</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <!-- Navbar Section -->
+   <nav class="navbar">
+       <div class="navbar__container">
+           <a href="/" id="navbar__logo">Geologi Kebencanaan</a>
+           <div class="navbar__toggle" id="mobile-menu">
+               <span class="bar"></span>
+               <span class="bar"></span>
+               <span class="bar"></span>
+           </div>
+           <ul class="navbar__menu">
+               <li class="navbar__item">
+                   <a href="/" class="navbar__links">Home</a>
+               </li>
+               <li class="navbar__item">
+                <a href="/map.html" class="navbar__links">Map</a>
+            </li>
+            <li class="navbar__item">
+                <a href="/" class="navbar__links">About Us</a>
+            </li>
+            <li class="navbar__btn">
+                <a href="/" class="button">Sign Up</a>
+            </li>
+           </ul>
+       </div>
+   </nav>
+
+<html>
+    <head>
+        <link rel="stylesheet" href="http://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+        <script src="http://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+        <script src="js/kml.js"></script>
+    </head>
+    <body>
+        <div style="width: 100vw; height: 100vh" id="map"></div>
+        <script type="text/javascript">
+            // Make basemap
+            const map = new L.Map('map', { center: new L.LatLng(58.4, 43.0), zoom: 11 });
+            const osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+            map.addLayer(osm);
+
+            // Load kml file
+            fetch('asset/Gempa Bumi.kml')
+                .then(res => res.text())
+                .then(kmltext => {
+                    // Create new kml overlay
+                    const parser = new DOMParser();
+                    const kml = parser.parseFromString(kmltext, 'text/xml');
+                    const track = new L.KML(kml);
+                    map.addLayer(track);
+
+                    // Adjust map to show the kml
+                    const bounds = track.getBounds();
+                    map.fitBounds(bounds);
+                });
+        </script>
+    </body>
+</html>
